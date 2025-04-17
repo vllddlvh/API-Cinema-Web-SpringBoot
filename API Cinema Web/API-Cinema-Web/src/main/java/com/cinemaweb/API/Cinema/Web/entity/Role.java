@@ -1,20 +1,29 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Entity
-@Data
+@Table(name = "role")
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Room {
+public class Role {
     @Id
-    int roomId;
+    String name;
 
-    int cinemaId;
-    String roomName;
+    String description;
+
+    @ManyToMany
+    Set<Permission> permissions;
 }

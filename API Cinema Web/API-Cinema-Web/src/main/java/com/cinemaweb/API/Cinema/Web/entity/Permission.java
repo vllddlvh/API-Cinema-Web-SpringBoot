@@ -2,25 +2,21 @@ package com.cinemaweb.API.Cinema.Web.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Date;
-
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "permission")
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Booking {
+public class Permission {
     @Id
-    int bookingId;
+    String name;
 
-    int userId;
-    int scheduleId;
-    int seatId;
-    double price;
-    Date bookingDay;
-    int foodAndDrinkId;
+    String description;
 }
