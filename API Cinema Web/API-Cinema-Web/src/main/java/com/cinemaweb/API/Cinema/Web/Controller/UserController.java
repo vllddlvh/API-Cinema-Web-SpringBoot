@@ -30,6 +30,13 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/myInfo")
+    public ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .body(userService.getMyInfo())
+                .build();
+    }
+
     @GetMapping()
     @PostAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<UserResponse>> getAll() {
