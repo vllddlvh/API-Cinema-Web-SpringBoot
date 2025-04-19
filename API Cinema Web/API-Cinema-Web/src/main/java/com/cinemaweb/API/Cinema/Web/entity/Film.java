@@ -11,9 +11,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
     @Id

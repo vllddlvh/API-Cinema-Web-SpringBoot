@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmResponse {
+    int filmId;
     String filmName;
     String filmPoster;
     String filmGenre;
