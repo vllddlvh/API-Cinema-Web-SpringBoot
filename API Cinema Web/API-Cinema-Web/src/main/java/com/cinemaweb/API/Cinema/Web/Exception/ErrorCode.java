@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatusCode;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
     UNKNOWN_EXCEPTION(9999, "Unknown Error!", HttpStatus.INTERNAL_SERVER_ERROR),
+    RUNTIME_EXCEPTION(8888, "Runtime Error!", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_EXISTED(1001, "User existed!!", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTS(1002, "User not exists!", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1006, "UNAUTHENTICATED", HttpStatus.UNAUTHORIZED),

@@ -1,6 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.Exception;
 
-import com.cinemaweb.API.Cinema.Web.DTO.Response.ApiResponse;
+
 import com.cinemaweb.API.Cinema.Web.DTO.Response.ApiResponseError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +26,20 @@ public class GlobalExceptionHandler {
                 .body(apiResponseError);
 
     }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<ApiResponseError> handlingRuntimeException(RuntimeException e) {
+        ApiResponseError apiResponseError = ApiResponseError.builder()
+                .code(ErrorCode.RUNTIME_EXCEPTION.getCode())
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity
+                .status(ErrorCode.UNKNOWN_EXCEPTION.getHttpStatusCode())
+                .body(apiResponseError);
+
+    }
+
 
     @ExceptionHandler(value = AppException.class)
     public ResponseEntity<ApiResponseError> handlingAppException(AppException e) {

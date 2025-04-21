@@ -3,11 +3,14 @@ package com.cinemaweb.API.Cinema.Web.Service;
 
 import com.cinemaweb.API.Cinema.Web.DTO.Request.AuthenticationRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.IntrospectRequest;
+import com.cinemaweb.API.Cinema.Web.DTO.Request.LogoutRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.IntrospectResponse;
 import com.cinemaweb.API.Cinema.Web.Exception.AppException;
 import com.cinemaweb.API.Cinema.Web.Exception.ErrorCode;
+import com.cinemaweb.API.Cinema.Web.Repository.InvalidatedTokenRepository;
 import com.cinemaweb.API.Cinema.Web.Repository.UserRepository;
+import com.cinemaweb.API.Cinema.Web.entity.InvalidatedToken;
 import com.cinemaweb.API.Cinema.Web.entity.User;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -19,11 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -31,6 +32,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +41,14 @@ import java.util.StringJoiner;
 public class AuthenticationService {
 
     UserRepository userRepository;
-    PasswordEncoder passwordEncoder;
+    InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
@@ -60,6 +63,33 @@ public class AuthenticationService {
                 .build();
     }
 
+    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+
+        SignedJWT signedJWT = verifyToken(request.getToken());
+        JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+        String tokenID = claimsSet.getJWTID();
+        Date expiryTime = claimsSet.getExpirationTime();
+
+        invalidatedTokenRepository.save(new InvalidatedToken(tokenID, expiryTime));
+
+    }
+
+    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+
+        JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        Date expiryTime =signedJWT.getJWTClaimsSet().getExpirationTime();
+        boolean verified = signedJWT.verify(jwsVerifier);
+
+        if (!(verified && expiryTime.after(new Date())))
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+
+        if (invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+        return signedJWT;
+    }
+
 
     public String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
@@ -69,6 +99,7 @@ public class AuthenticationService {
                 .issuer("API-Cinema-Web")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
+                .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 
@@ -89,14 +120,16 @@ public class AuthenticationService {
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         String token = request.getToken();
-        JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expiryTime =signedJWT.getJWTClaimsSet().getExpirationTime();
+        boolean isValid = true;
 
-        boolean verified = signedJWT.verify(jwsVerifier);
+        try {
+            verifyToken(token);
+        } catch (AppException e) {
+            isValid = false;
+        }
 
         return IntrospectResponse.builder()
-                .valid(verified && expiryTime.after(new Date()))
+                .valid(isValid)
                 .build();
     }
 
