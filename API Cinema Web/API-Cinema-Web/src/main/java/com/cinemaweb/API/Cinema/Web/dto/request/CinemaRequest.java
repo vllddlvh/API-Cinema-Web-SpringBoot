@@ -8,11 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FilmUpdateRequest {
-    String filmName;
-    String filmPoster;
-    String filmGenre;
-    int filmLength;  //this time watch film
-    String filmDescription;
-    int filmReview;
+public class CinemaRequest {
+    String cinemaName;
+    String cinemaAddress;
 }

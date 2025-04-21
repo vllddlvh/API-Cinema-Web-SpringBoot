@@ -1,6 +1,8 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,7 +18,7 @@ public class Seat {
 
     String seatType;
     int roomId;
-    String row;
-    int number;
+    String seatRow;
+    int seatNumber;
     double seatPrice;
 }

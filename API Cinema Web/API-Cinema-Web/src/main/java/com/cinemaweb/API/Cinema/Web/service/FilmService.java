@@ -1,7 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.service;
 
-import com.cinemaweb.API.Cinema.Web.dto.request.FilmCreateRequest;
-import com.cinemaweb.API.Cinema.Web.dto.request.FilmUpdateRequest;
+import com.cinemaweb.API.Cinema.Web.dto.request.FilmRequest;
 import com.cinemaweb.API.Cinema.Web.dto.response.FilmResponse;
 import com.cinemaweb.API.Cinema.Web.entity.Film;
 import com.cinemaweb.API.Cinema.Web.mapper.FilmMapper;
@@ -31,11 +30,11 @@ public class FilmService {
         -> new RuntimeException("User not found")));
     }
 
-    public void createFilm(FilmCreateRequest filmCreateRequest) {
+    public void createFilm(FilmRequest filmCreateRequest) {
         filmRepository.save(filmMapper.toFilm(filmCreateRequest));
     }
 
-    public FilmResponse updateFilm(String filmId, FilmUpdateRequest filmUpdateRequest) {
+    public FilmResponse updateFilm(String filmId, FilmRequest filmUpdateRequest) {
         Film film = filmRepository.findById(filmId).orElseThrow(()
                 -> new RuntimeException("User not found"));
 

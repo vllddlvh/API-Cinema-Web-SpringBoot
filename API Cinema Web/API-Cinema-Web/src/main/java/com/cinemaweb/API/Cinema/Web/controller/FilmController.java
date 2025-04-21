@@ -1,7 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.controller;
 
-import com.cinemaweb.API.Cinema.Web.dto.request.FilmCreateRequest;
-import com.cinemaweb.API.Cinema.Web.dto.request.FilmUpdateRequest;
+import com.cinemaweb.API.Cinema.Web.dto.request.FilmRequest;
 import com.cinemaweb.API.Cinema.Web.dto.response.FilmResponse;
 import com.cinemaweb.API.Cinema.Web.entity.Film;
 import com.cinemaweb.API.Cinema.Web.service.FilmService;
@@ -14,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cinema")
+@RequestMapping("/films")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmController {
     @Autowired
     FilmService filmService;
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> getAllFilms() {
         return filmService.getAllFilms();
     }
@@ -31,18 +30,18 @@ public class FilmController {
     }
 
     @PostMapping
-    public void createFilm(@RequestBody @Valid FilmCreateRequest filmCreateRequest) {
+    public void createFilm(@RequestBody @Valid FilmRequest filmCreateRequest) {
         filmService.createFilm(filmCreateRequest);
     }
 
     @PutMapping("{filmid}")
-    public FilmResponse updateFilm(@PathVariable String filmid, @RequestBody FilmUpdateRequest filmUpdateRequest) {
+    public FilmResponse updateFilm(@PathVariable String filmid, @RequestBody FilmRequest filmUpdateRequest) {
         return filmService.updateFilm(filmid, filmUpdateRequest);
     }
 
     @DeleteMapping("{filmid}")
-    public List<Film> deleteFilm(@PathVariable String filmid) {
+    public String deleteFilm(@PathVariable String filmid) {
         filmService.deleteFilm(filmid);
-        return filmService.getAllFilms();
+        return "Film with id" + filmid + " has been deleted";
     }
 }
