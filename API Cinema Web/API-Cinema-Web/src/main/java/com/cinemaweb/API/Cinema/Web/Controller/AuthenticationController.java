@@ -3,6 +3,7 @@ package com.cinemaweb.API.Cinema.Web.Controller;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.AuthenticationRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.IntrospectRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.LogoutRequest;
+import com.cinemaweb.API.Cinema.Web.DTO.Request.RefreshTokenRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.ApiResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.IntrospectResponse;
@@ -45,4 +46,11 @@ public class AuthenticationController {
         return ApiResponse.<Void>builder().build();
     }
 
+    @PostMapping("/refresh-Token")
+    public ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
+            throws ParseException, JOSEException {
+        return ApiResponse.<AuthenticationResponse>builder()
+                .body(authenticationService.refreshToken(request))
+                .build();
+    }
 }

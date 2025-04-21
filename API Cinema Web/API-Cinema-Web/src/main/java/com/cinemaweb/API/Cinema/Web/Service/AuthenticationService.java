@@ -4,6 +4,7 @@ package com.cinemaweb.API.Cinema.Web.Service;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.AuthenticationRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.IntrospectRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.LogoutRequest;
+import com.cinemaweb.API.Cinema.Web.DTO.Request.RefreshTokenRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.IntrospectResponse;
 import com.cinemaweb.API.Cinema.Web.Exception.AppException;
@@ -74,6 +75,43 @@ public class AuthenticationService {
 
     }
 
+
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+        String token = request.getToken();
+        boolean isValid = true;
+
+        try {
+            verifyToken(token);
+        } catch (AppException e) {
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder()
+                .valid(isValid)
+                .build();
+    }
+
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest request) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(request.getToken());
+        String tokenID = signedJWT.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = new InvalidatedToken(tokenID, expiryTime);
+
+        invalidatedTokenRepository.save(invalidatedToken);
+        String username = signedJWT.getJWTClaimsSet().getSubject();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
+
+        String newToken = generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(newToken)
+                .authenticated(true)
+                .build();
+    }
+
+
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
 
         JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
@@ -118,20 +156,6 @@ public class AuthenticationService {
     }
 
 
-    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
-        String token = request.getToken();
-        boolean isValid = true;
-
-        try {
-            verifyToken(token);
-        } catch (AppException e) {
-            isValid = false;
-        }
-
-        return IntrospectResponse.builder()
-                .valid(isValid)
-                .build();
-    }
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
