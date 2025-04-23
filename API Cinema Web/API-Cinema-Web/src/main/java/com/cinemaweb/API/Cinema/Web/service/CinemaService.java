@@ -18,8 +18,9 @@ public class CinemaService {
     @Autowired
     private CinemaMapper cinemaMapper;
 
-    public List<Cinema> getAllCinemas() {
-        return cinemaRepository.findAll();
+
+    public List<CinemaResponse> getAllCinemas() {
+        return cinemaMapper.toCinemaResponseList(cinemaRepository.findAll());
     }
 
     public CinemaResponse getCinema(String cinemaId) {

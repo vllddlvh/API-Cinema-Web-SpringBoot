@@ -8,7 +8,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CinemaResponse {
-    String cinemaName;
-    String cinemaAddress;
+public class SeatResponse {
+    String roomName;
+    String seatType;
+    String seatRow;
+    int seatNumber;
+    double seatPrice;
 }

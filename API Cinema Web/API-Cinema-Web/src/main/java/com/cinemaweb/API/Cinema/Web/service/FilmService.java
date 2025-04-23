@@ -21,8 +21,8 @@ public class FilmService {
     @Autowired
     FilmMapper filmMapper;
 
-    public List<Film> getAllFilms() {
-        return filmRepository.findAll();
+    public List<FilmResponse> getAllFilms() {
+        return filmMapper.toFilmResponseList(filmRepository.findAll());
     }
 
     public FilmResponse getFilm(String filmId) {

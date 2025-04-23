@@ -1,11 +1,10 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
@@ -17,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class FoodAndDrink {
     @Column(name = "fd_id")
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     int foodAndDrinkId;
 
     @Column(name = "fd_name")

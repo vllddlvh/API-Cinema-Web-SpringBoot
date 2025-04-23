@@ -1,9 +1,10 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
@@ -13,8 +14,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Room {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     int roomId;
 
-    int cinemaId;
+    @ManyToOne
+    @JoinColumn(name = "cinema_id")
+    Cinema cinema;
+
     String roomName;
 }

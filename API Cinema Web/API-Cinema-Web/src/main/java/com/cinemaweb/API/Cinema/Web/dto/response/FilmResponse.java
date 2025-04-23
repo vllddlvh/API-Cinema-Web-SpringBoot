@@ -10,8 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmResponse {
-    int filmId;
-
     @Size(min = 30, message = "Min length film name is  30 character")
     String filmName;
 

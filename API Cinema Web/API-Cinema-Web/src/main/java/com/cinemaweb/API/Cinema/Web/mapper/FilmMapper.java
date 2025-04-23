@@ -6,6 +6,8 @@ import com.cinemaweb.API.Cinema.Web.entity.Film;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface FilmMapper {
     FilmResponse toFilmResponse(Film film);
@@ -13,4 +15,6 @@ public interface FilmMapper {
     Film toFilm(FilmRequest filmCreateRequest);
 
     void updateFilm(@MappingTarget Film film, FilmRequest filmUpdateRequest);
+
+    List<FilmResponse> toFilmResponseList(List<Film> film);
 }

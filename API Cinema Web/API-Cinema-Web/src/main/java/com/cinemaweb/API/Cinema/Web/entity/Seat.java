@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -14,11 +16,18 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Seat {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     int seatId;
 
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    Room room;
+
     String seatType;
-    int roomId;
     String seatRow;
     int seatNumber;
     double seatPrice;
+
+
+    boolean seatState; // 0 is not sold, 1 is sold
 }

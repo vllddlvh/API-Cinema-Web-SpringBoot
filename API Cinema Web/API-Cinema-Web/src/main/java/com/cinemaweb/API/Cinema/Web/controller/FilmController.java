@@ -20,7 +20,7 @@ public class FilmController {
     FilmService filmService;
 
     @GetMapping
-    public List<Film> getAllFilms() {
+    public List<FilmResponse> getAllFilms() {
         return filmService.getAllFilms();
     }
 
