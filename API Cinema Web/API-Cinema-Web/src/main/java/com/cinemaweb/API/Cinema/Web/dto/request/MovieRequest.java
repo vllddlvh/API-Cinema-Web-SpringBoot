@@ -12,13 +12,13 @@ import lombok.experimental.FieldDefaults;
 /**
  * This dto is creation dto and update dto
  */
-public class FilmRequest {
+public class MovieRequest {
     @Size(max = 30, message = "Min length film name is  30 character")
-    String filmName;
+    String movieName;
 
-    String filmPoster;
-    String filmGenre;
-    int filmLength;  //this time watch film
-    String filmDescription;
-    int filmReview;
+    String moviePoster;
+    String movieGenre;
+    int movieLength;  //this time watch film
+    String movieDescription;
+    int movieReview;  //its star 1* 2* 3* ...
 }

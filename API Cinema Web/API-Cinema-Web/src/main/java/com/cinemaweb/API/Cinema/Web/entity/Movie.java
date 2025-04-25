@@ -1,10 +1,10 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -12,15 +12,15 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Film {
+public class Movie {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    int filmId;
+    int movieId;
 
-    String filmName;
-    String filmPoster;
-    String filmGenre;
-    int filmLength;  //this time watch film
-    String filmDescription;
-    int filmReview;  //its star 1* 2* 3* ...
+    String movieName;
+    String moviePoster;
+    String movieGenre;
+    int movieLength;  //this time watch film
+    String movieDescription;
+    int movieReview;  //its star 1* 2* 3* ...
 }

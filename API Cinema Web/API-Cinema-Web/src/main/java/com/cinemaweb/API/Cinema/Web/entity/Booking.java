@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -24,7 +24,7 @@ public class Booking {
     int userId;
     int scheduleId;
     int seatId;
-    double price;
-    Date bookingDay;
     int foodAndDrinkId;
+    double price;
+    LocalDateTime bookingDay;
 }

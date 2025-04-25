@@ -22,8 +22,9 @@ public class FoodAndDrink {
     @Column(name = "fd_name")
     String foodAndDrinkName;
 
-    @Column(name = "room_id")
-    int roomId;
+    @ManyToOne
+    @JoinColumn(name = "cinema_id")
+    Cinema cinema;
 
     @Column(name = "fd_price")
     double foodAndDrinkPrice;

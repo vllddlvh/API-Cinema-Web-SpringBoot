@@ -1,13 +1,12 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -22,9 +21,19 @@ public class Schedule {
     @GeneratedValue(strategy = IDENTITY)
     int scheduleId;
 
-    int filmId;
-    int roomId;
-    Date scheduleDate;  //Date in SQL
-    Time scheduleStart; //Time in SQL
-    Time scheduleEnd;
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "cinema_id")
+    Cinema cinema;
+    
+    LocalDate scheduleDate;  //LocalDate in Jav
+    LocalTime scheduleStart; //LocalTime in Java
+    LocalTime scheduleEnd;
 }

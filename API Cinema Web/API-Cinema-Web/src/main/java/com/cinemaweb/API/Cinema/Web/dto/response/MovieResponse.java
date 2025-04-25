@@ -9,13 +9,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FilmResponse {
+public class MovieResponse {
     @Size(min = 30, message = "Min length film name is  30 character")
-    String filmName;
+    String movieName;
 
-    String filmPoster;
-    String filmGenre;
-    int filmLength;  //this time watch film
-    String filmDescription;
-    int filmReview;
+    String moviePoster;
+    String movieGenre;
+    int movieLength;  //this time watch film
+    String movieDescription;
+    int movieReview;  //its star 1* 2* 3* ...
 }
