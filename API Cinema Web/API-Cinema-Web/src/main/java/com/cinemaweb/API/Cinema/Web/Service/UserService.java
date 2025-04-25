@@ -1,5 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.Service;
 
+import com.cinemaweb.API.Cinema.Web.DTO.Request.PasswordResetRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.UserCreationRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Request.UserUpdateRequest;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.UserResponse;
@@ -7,15 +8,16 @@ import com.cinemaweb.API.Cinema.Web.Enum.Role;
 import com.cinemaweb.API.Cinema.Web.Exception.AppException;
 import com.cinemaweb.API.Cinema.Web.Exception.ErrorCode;
 import com.cinemaweb.API.Cinema.Web.Mapper.UserMapper;
+import com.cinemaweb.API.Cinema.Web.Repository.PasswordOtpRepository;
 import com.cinemaweb.API.Cinema.Web.Repository.RoleRepository;
 import com.cinemaweb.API.Cinema.Web.Repository.UserRepository;
+import com.cinemaweb.API.Cinema.Web.entity.PasswordOTP;
 import com.cinemaweb.API.Cinema.Web.entity.User;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
+    EmailService emailService;
+    PasswordOtpRepository passwordTokenRepository;
 
     public UserResponse get(String id) {
         return userMapper.toUserResponse(userRepository.findById(id)
@@ -83,5 +87,12 @@ public class UserService {
 
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+
+    public void resetPassword(PasswordOTP passwordOTP, String newPassword) {
+        User user = passwordOTP.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

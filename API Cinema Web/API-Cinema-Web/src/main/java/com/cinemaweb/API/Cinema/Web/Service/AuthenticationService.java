@@ -1,17 +1,16 @@
 package com.cinemaweb.API.Cinema.Web.Service;
 
 
-import com.cinemaweb.API.Cinema.Web.DTO.Request.AuthenticationRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.IntrospectRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.LogoutRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.RefreshTokenRequest;
+import com.cinemaweb.API.Cinema.Web.DTO.Request.*;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.IntrospectResponse;
 import com.cinemaweb.API.Cinema.Web.Exception.AppException;
 import com.cinemaweb.API.Cinema.Web.Exception.ErrorCode;
 import com.cinemaweb.API.Cinema.Web.Repository.InvalidatedTokenRepository;
+import com.cinemaweb.API.Cinema.Web.Repository.PasswordOtpRepository;
 import com.cinemaweb.API.Cinema.Web.Repository.UserRepository;
 import com.cinemaweb.API.Cinema.Web.entity.InvalidatedToken;
+import com.cinemaweb.API.Cinema.Web.entity.PasswordOTP;
 import com.cinemaweb.API.Cinema.Web.entity.User;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -43,6 +42,9 @@ public class AuthenticationService {
 
     UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
+    EmailService emailService;
+    PasswordOtpRepository passwordOtpRepository;
+    UserService userService;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -91,6 +93,44 @@ public class AuthenticationService {
                 .build();
     }
 
+    public String getPasswordToken(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email khong ton tai"));
+
+        PasswordOTP passwordOTP = PasswordOTP.builder()
+                .user(user)
+                .expiryTime(new Date(Instant.now().plus(10, ChronoUnit.MINUTES).toEpochMilli()))
+                .build();
+
+        emailService.sendResetPasswordToken(user, passwordOTP);
+        passwordOtpRepository.save(passwordOTP);
+
+        return "Please check your email to get OTP used to reset your password!";
+
+        // sendMail có thể ném ra MailException hãy xử lý trong globalExceptionHandler
+        // Có thể nghiên cứu thay return value bằng một response khác rõ ràng hơn để cho người dùng biết hãy kiểm tra mail
+    }
+
+    public void resetPassword(PasswordResetRequest request) {
+        PasswordOTP passwordOTP = verifyOTP(request.getOTP());
+        if (request.getNewPassword().equals(request.getConfirmPassword())) {
+            userService.resetPassword(passwordOTP, request.getNewPassword());
+        } else {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
+
+    private PasswordOTP verifyOTP(String OTP) {
+        PasswordOTP passwordOTP = passwordOtpRepository.findByOTP(OTP)
+                .orElseThrow(() -> new RuntimeException("OTP khong chinh xac"));
+
+        if (passwordOTP.getExpiryTime().before(new Date())) {
+            return passwordOTP;
+        }
+
+        throw new RuntimeException("OTP het hieu luc");
+    }
+    
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest request) throws ParseException, JOSEException {
         SignedJWT signedJWT = verifyToken(request.getToken());

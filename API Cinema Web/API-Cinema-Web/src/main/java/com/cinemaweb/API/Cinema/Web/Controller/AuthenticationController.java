@@ -1,9 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.Controller;
 
-import com.cinemaweb.API.Cinema.Web.DTO.Request.AuthenticationRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.IntrospectRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.LogoutRequest;
-import com.cinemaweb.API.Cinema.Web.DTO.Request.RefreshTokenRequest;
+import com.cinemaweb.API.Cinema.Web.DTO.Request.*;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.ApiResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.DTO.Response.IntrospectResponse;
@@ -53,4 +50,20 @@ public class AuthenticationController {
                 .body(authenticationService.refreshToken(request))
                 .build();
     }
+
+    @PostMapping("/forget-password")
+    public ApiResponse<String> getPasswordOTP(@RequestBody PasswordOtpRequest request) {
+        return ApiResponse.<String>builder()
+                .body(authenticationService.getPasswordToken(request.getEmail()))
+                .build();
+    }
+
+    @PostMapping("/reset-password")
+    public ApiResponse<String> resetPassword(@RequestBody PasswordResetRequest request) {
+        authenticationService.resetPassword(request);
+        return ApiResponse.<String>builder()
+                .body("Reset password thanh cong!")
+                .build();
+    }
+
 }

@@ -22,9 +22,10 @@ public enum ErrorCode {
     REQUEST_MISSING_BODY(5555, "Request must have body!", HttpStatus.BAD_REQUEST),
     INVALID_USERNAME(3001, "User name must be at lest 6 characters!", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(3002, "Password must be at lest 8 characters", HttpStatus.BAD_REQUEST),
-    USERNAME_IS_NULL(3002, "Username must not be null", HttpStatus.BAD_REQUEST),
-    PASSWORD_IS_NULL(3002, "Password must not be null", HttpStatus.BAD_REQUEST),
-    DOB_IS_NULL(3002, "User's DOB must not be bull", HttpStatus.BAD_REQUEST)
+    USERNAME_IS_NULL(3005, "Username must not be null", HttpStatus.BAD_REQUEST),
+    PASSWORD_IS_NULL(3004, "Password must not be null", HttpStatus.BAD_REQUEST),
+    DOB_IS_NULL(3003, "User's DOB must not be bull", HttpStatus.BAD_REQUEST),
+    EMAIL_IS_NULL(3006, "User's email must not be bull", HttpStatus.BAD_REQUEST)
     ;
     int code;
     String message;
