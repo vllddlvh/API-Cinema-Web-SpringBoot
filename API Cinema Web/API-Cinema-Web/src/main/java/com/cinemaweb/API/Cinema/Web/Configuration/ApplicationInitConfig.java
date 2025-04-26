@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
@@ -38,6 +39,11 @@ public class ApplicationInitConfig {
                         .password(passwordEncoder.encode("admin"))
                         .gender(1)
                         .roles(roles)
+                        .phoneNumber("000000000")
+                        .email("admin@cinemaweb.com")
+                        .firstName("admin")
+                        .lastName("admin")
+                        .dateOfBirth(LocalDate.parse("2005-09-06"))
                         .build();
                 userRepository.save(user);
                 log.warn("admin account has been created with default password: admin!");

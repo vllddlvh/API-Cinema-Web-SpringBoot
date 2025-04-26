@@ -26,15 +26,19 @@ public class UserCreationRequest {
     String password;
     @NotNull(message = "PASSWORD_IS_NULL")
     String checkPassword;
+    @NotNull
     String firstName;
-    String lastName = "Unknown user";
+    @NotNull
+    String lastName;
 
     @NotNull(message = "DOB_IS_NULL")
     LocalDate dateOfBirth;
 
     @NotNull(message = "EMAIL_IS_NULL")
     String email;
+    @NotNull
     String phoneNumber;
+    @NotNull
     Integer gender;
     String avatar = "default avatar";
 

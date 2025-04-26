@@ -1,6 +1,7 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
@@ -17,23 +18,26 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
     String ID;
 
-    @Column(name = "username", nullable = false)
     String username;
-
-    @Column(name = "password", nullable = false)
     String password;
-
     String firstName;
     String lastName;
     LocalDate dateOfBirth;
-    Double point;
-    String email;
-    String phoneNumber;
     Integer gender;
     String avatar;
+    String email;
+    String phoneNumber;
+    Double point;
+
     @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_name")
+    )
     Set<Role> roles;
 
 }

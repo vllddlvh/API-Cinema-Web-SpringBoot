@@ -1,5 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.DTO.Request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,5 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RefreshTokenRequest {
+    @NotNull
     String token;
 }
