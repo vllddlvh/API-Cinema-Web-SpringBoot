@@ -1,4 +1,4 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Request;
+package com.cinemaweb.API.Cinema.Web.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

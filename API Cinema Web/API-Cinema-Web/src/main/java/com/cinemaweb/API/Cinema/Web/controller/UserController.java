@@ -1,9 +1,9 @@
 package com.cinemaweb.API.Cinema.Web.controller;
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.UserCreationRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Request.UserUpdateRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponse;
-import com.cinemaweb.API.Cinema.Web.dto.Response.UserResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.UserCreationRequest;
+import com.cinemaweb.API.Cinema.Web.dto.request.UserUpdateRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponse;
+import com.cinemaweb.API.Cinema.Web.dto.response.UserResponse;
 import com.cinemaweb.API.Cinema.Web.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

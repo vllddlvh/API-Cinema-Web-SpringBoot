@@ -2,8 +2,7 @@ package com.cinemaweb.API.Cinema.Web.configuration;
 
 import java.io.IOException;
 
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponse;
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponseError;
+import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponseError;
 import com.cinemaweb.API.Cinema.Web.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

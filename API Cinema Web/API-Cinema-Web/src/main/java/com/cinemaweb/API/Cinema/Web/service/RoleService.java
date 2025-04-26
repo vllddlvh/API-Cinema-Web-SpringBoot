@@ -1,7 +1,7 @@
 package com.cinemaweb.API.Cinema.Web.service;
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.RoleRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.RoleResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.RoleRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.RoleResponse;
 import com.cinemaweb.API.Cinema.Web.exception.AppException;
 import com.cinemaweb.API.Cinema.Web.exception.ErrorCode;
 import com.cinemaweb.API.Cinema.Web.mapper.RoleMapper;

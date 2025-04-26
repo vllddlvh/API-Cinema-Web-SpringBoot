@@ -1,7 +1,7 @@
 package com.cinemaweb.API.Cinema.Web.configuration;
 
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.IntrospectRequest;
+import com.cinemaweb.API.Cinema.Web.dto.request.IntrospectRequest;
 import com.cinemaweb.API.Cinema.Web.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;

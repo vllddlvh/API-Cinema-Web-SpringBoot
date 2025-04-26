@@ -1,4 +1,4 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Response;
+package com.cinemaweb.API.Cinema.Web.dto.response;
 
 
 import lombok.*;

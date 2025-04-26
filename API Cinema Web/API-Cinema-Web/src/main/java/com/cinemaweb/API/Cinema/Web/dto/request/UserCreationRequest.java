@@ -1,11 +1,10 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Request;
+package com.cinemaweb.API.Cinema.Web.dto.request;
 
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package com.cinemaweb.API.Cinema.Web.exception;
 
 
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponseError;
+import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponseError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -1,9 +1,8 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Response;
+package com.cinemaweb.API.Cinema.Web.dto.request;
 
-
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.util.Set;
 
 @NoArgsConstructor
@@ -11,8 +10,9 @@ import java.util.Set;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleResponse {
+public class RoleRequest {
+    @NotNull(message = "ROLE_NAME_IS_NULL")
     String name;
     String description;
-    Set<PermissionResponse> permissions;
+    Set<String> permissions;
 }

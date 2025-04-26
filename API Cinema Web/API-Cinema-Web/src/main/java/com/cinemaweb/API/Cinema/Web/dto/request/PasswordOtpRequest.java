@@ -1,4 +1,4 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Request;
+package com.cinemaweb.API.Cinema.Web.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RefreshTokenRequest {
+public class PasswordOtpRequest {
     @NotNull
-    String token;
+    String email;
 }

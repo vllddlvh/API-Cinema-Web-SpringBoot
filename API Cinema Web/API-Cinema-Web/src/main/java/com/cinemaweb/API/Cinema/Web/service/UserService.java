@@ -1,9 +1,8 @@
 package com.cinemaweb.API.Cinema.Web.service;
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.PasswordResetRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Request.UserCreationRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Request.UserUpdateRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.UserResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.UserCreationRequest;
+import com.cinemaweb.API.Cinema.Web.dto.request.UserUpdateRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.UserResponse;
 import com.cinemaweb.API.Cinema.Web.enums.Role;
 import com.cinemaweb.API.Cinema.Web.exception.AppException;
 import com.cinemaweb.API.Cinema.Web.exception.ErrorCode;

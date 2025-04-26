@@ -1,4 +1,4 @@
-package com.cinemaweb.API.Cinema.Web.DTO.Request;
+package com.cinemaweb.API.Cinema.Web.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,7 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PasswordOtpRequest {
+public class AuthenticationRequest {
     @NotNull
-    String email;
+    String username;
+    @NotNull
+    String password;
 }

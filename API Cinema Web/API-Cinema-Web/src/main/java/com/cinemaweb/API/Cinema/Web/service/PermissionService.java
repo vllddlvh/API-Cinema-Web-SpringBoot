@@ -1,7 +1,7 @@
 package com.cinemaweb.API.Cinema.Web.service;
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.PermissionRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.PermissionResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.PermissionRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.PermissionResponse;
 import com.cinemaweb.API.Cinema.Web.mapper.PermissionMapper;
 import com.cinemaweb.API.Cinema.Web.repository.PermissionRepository;
 import com.cinemaweb.API.Cinema.Web.entity.Permission;

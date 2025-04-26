@@ -1,8 +1,8 @@
 package com.cinemaweb.API.Cinema.Web.controller;
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.RoleRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponse;
-import com.cinemaweb.API.Cinema.Web.dto.Response.RoleResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.RoleRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponse;
+import com.cinemaweb.API.Cinema.Web.dto.response.RoleResponse;
 import com.cinemaweb.API.Cinema.Web.service.RoleService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

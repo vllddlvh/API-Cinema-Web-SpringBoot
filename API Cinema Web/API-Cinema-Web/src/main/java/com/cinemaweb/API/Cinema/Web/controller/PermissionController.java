@@ -1,9 +1,9 @@
 package com.cinemaweb.API.Cinema.Web.controller;
 
 
-import com.cinemaweb.API.Cinema.Web.dto.Request.PermissionRequest;
-import com.cinemaweb.API.Cinema.Web.dto.Response.ApiResponse;
-import com.cinemaweb.API.Cinema.Web.dto.Response.PermissionResponse;
+import com.cinemaweb.API.Cinema.Web.dto.request.PermissionRequest;
+import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponse;
+import com.cinemaweb.API.Cinema.Web.dto.response.PermissionResponse;
 import com.cinemaweb.API.Cinema.Web.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
