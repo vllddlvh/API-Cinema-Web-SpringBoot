@@ -1,5 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.controller;
 
+import com.cinemaweb.API.Cinema.Web.dto.request.*;
 import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponse;
 import com.cinemaweb.API.Cinema.Web.dto.response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.dto.response.IntrospectResponse;
@@ -63,7 +64,6 @@ public class AuthenticationController {
     @PostMapping("/reset-password")
     public ApiResponse<String> resetPassword(@RequestBody PasswordResetRequest request) {
         authenticationService.resetPassword(request);
-        log.warn("Dang reset");
         return ApiResponse.<String>builder()
                 .body("Reset password thanh cong!")
                 .build();
