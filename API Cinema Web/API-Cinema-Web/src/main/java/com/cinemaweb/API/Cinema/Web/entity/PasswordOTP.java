@@ -1,5 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -17,12 +18,15 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PasswordOTP {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonProperty("OTP")
     String OTP;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     User user;
+
+    @NotNull
+    boolean valid;
 
     @NotNull
     Date expiryTime;

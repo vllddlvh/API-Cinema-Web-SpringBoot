@@ -25,7 +25,7 @@ public class EmailService {
     private final String SYSTEM_EMAIL_ADDRESS = "buihaiphupng6@gmail.com";
 
 
-    public void sendResetPasswordToken(User user, PasswordOTP passwordOTP) throws MailException {
+    public void sendResetPasswordOtp(User user, PasswordOTP passwordOTP) throws MailException {
         String OTP = passwordOTP.getOTP();
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
@@ -39,7 +39,4 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    private String generateToken() {
-        return UUID.randomUUID().toString();
-    }
 }

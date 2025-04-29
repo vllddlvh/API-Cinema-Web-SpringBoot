@@ -24,7 +24,8 @@ spring:
           starttls:
             enable: true
             required: true
-
+          ssl:
+            trust: smtp.gmail.com
 
 jwt:
   signerKey: "fAhsFQLtyhPPawzKmGDEU/IDeBpV7nGnIaQIWYZCzh8qGSb+ETsbFOoMfwfNsUgA"

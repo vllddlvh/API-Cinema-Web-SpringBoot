@@ -9,6 +9,7 @@ import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("auth")
@@ -25,6 +27,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        log.warn("dang login");
         return ApiResponse.<AuthenticationResponse>builder()
                 .body(authenticationService.authenticate(request))
                 .build();
@@ -61,6 +64,7 @@ public class AuthenticationController {
     @PostMapping("/reset-password")
     public ApiResponse<String> resetPassword(@RequestBody PasswordResetRequest request) {
         authenticationService.resetPassword(request);
+        log.warn("Dang reset");
         return ApiResponse.<String>builder()
                 .body("Reset password thanh cong!")
                 .build();

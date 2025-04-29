@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -93,26 +94,34 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String getPasswordToken(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email khong ton tai"));
 
+        passwordOtpRepository.deleteByUser(user);
+
+        // Ép hibernate đẩy delete xuống để ko conflict với save ở đoạn sau do constraint unique
+        passwordOtpRepository.flush();
+
         PasswordOTP passwordOTP = PasswordOTP.builder()
+                .OTP(UUID.randomUUID().toString())
                 .user(user)
                 .expiryTime(new Date(Instant.now().plus(10, ChronoUnit.MINUTES).toEpochMilli()))
+                .valid(true)
                 .build();
 
-        emailService.sendResetPasswordToken(user, passwordOTP);
         passwordOtpRepository.save(passwordOTP);
+        emailService.sendResetPasswordOtp(user, passwordOTP);
 
         return "Please check your email to get OTP used to reset your password!";
 
         // sendMail có thể ném ra MailException hãy xử lý trong globalExceptionHandler
-        // Có thể nghiên cứu thay return value bằng một response khác rõ ràng hơn để cho người dùng biết hãy kiểm tra mail
     }
 
     public void resetPassword(PasswordResetRequest request) {
         PasswordOTP passwordOTP = verifyOTP(request.getOTP());
         if (request.getNewPassword().equals(request.getConfirmPassword())) {
+            log.warn("getting new");
             userService.resetPassword(passwordOTP, request.getNewPassword());
         } else {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
@@ -121,10 +130,10 @@ public class AuthenticationService {
 
 
     private PasswordOTP verifyOTP(String OTP) {
-        PasswordOTP passwordOTP = passwordOtpRepository.findByOTP(OTP)
+        PasswordOTP passwordOTP = passwordOtpRepository.findById(OTP)
                 .orElseThrow(() -> new RuntimeException("OTP khong chinh xac"));
 
-        if (passwordOTP.getExpiryTime().before(new Date())) {
+        if (passwordOTP.getExpiryTime().after(new Date())) {
             return passwordOTP;
         }
 

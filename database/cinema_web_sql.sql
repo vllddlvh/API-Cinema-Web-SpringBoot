@@ -144,7 +144,8 @@ DROP TABLE IF EXISTS `password_otp` ;
 CREATE TABLE IF NOT EXISTS `password_otp` (
   `otp` VARCHAR(36) NOT NULL,
   `expiry_time` DATETIME(6) NOT NULL,
-  `user_id` VARCHAR(36) NOT NULL,
+  `valid` BOOLEAN NOT NULL,
+  `user_id` VARCHAR(36) NOT NULL UNIQUE,
   PRIMARY KEY (`otp`),
   INDEX `fk_password_otp_user1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_password_otp_user1`
