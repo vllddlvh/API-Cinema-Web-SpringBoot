@@ -53,7 +53,7 @@ CREATE TABLE `booking` (
   `schedule_id` int NOT NULL,
   `seat_id` int NOT NULL,
   `price` double NOT NULL,
-  `booking_day` date NOT NULL,
+  `booking_day` datetime(6) DEFAULT NULL,
   `fd_id` int DEFAULT NULL,
   `food_and_drink_id` int NOT NULL,
   PRIMARY KEY (`booking_id`),
@@ -89,7 +89,7 @@ CREATE TABLE `cinema` (
   `cinema_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cinema_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`cinema_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,61 +98,8 @@ CREATE TABLE `cinema` (
 
 LOCK TABLES `cinema` WRITE;
 /*!40000 ALTER TABLE `cinema` DISABLE KEYS */;
+INSERT INTO `cinema` VALUES (1,'Beta Xuan Thuy, Cau giay','102 xuan thuy, cau giay'),(3,'Beta Giai Phong','781 giai phong, hai ba trung');
 /*!40000 ALTER TABLE `cinema` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `film`
---
-
-DROP TABLE IF EXISTS `film`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `film` (
-  `film_id` int NOT NULL AUTO_INCREMENT,
-  `film_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `film_poster` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `film_genre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `film_length` int NOT NULL,
-  `film_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `film_review` int DEFAULT NULL,
-  PRIMARY KEY (`film_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `film`
---
-
-LOCK TABLES `film` WRITE;
-/*!40000 ALTER TABLE `film` DISABLE KEYS */;
-INSERT INTO `film` VALUES (2,'Dao le long vu','xin chao','Novel',180,'test spring boot',4);
-/*!40000 ALTER TABLE `film` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `food_and_drink`
---
-
-DROP TABLE IF EXISTS `food_and_drink`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `food_and_drink` (
-  `food_and_drink_id` int NOT NULL,
-  `food_and_drink_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `food_and_drink_price` double NOT NULL,
-  `room_id` int NOT NULL,
-  PRIMARY KEY (`food_and_drink_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `food_and_drink`
---
-
-LOCK TABLES `food_and_drink` WRITE;
-/*!40000 ALTER TABLE `food_and_drink` DISABLE KEYS */;
-/*!40000 ALTER TABLE `food_and_drink` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -164,13 +111,14 @@ DROP TABLE IF EXISTS `foodanddrink`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `foodanddrink` (
   `fd_id` int NOT NULL AUTO_INCREMENT,
-  `fd_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `room_id` int NOT NULL,
+  `fd_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cinema_id` int NOT NULL,
   `fd_price` double NOT NULL,
   PRIMARY KEY (`fd_id`),
-  KEY `fk_foodanddrink_room_idx` (`room_id`),
-  CONSTRAINT `fk_foodanddrink_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `fk_foodanddrink_room_idx` (`cinema_id`),
+  CONSTRAINT `FK2bfct4r9wwpgl4ee44p4kydrn` FOREIGN KEY (`cinema_id`) REFERENCES `cinema` (`cinema_id`),
+  CONSTRAINT `fk_foodanddrink_room` FOREIGN KEY (`cinema_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +127,37 @@ CREATE TABLE `foodanddrink` (
 
 LOCK TABLES `foodanddrink` WRITE;
 /*!40000 ALTER TABLE `foodanddrink` DISABLE KEYS */;
+INSERT INTO `foodanddrink` VALUES (1,'1 bong 1 nuoc',3,3000),(2,'2 bong 1 nuoc',3,3000),(4,'3 bong 2 nuoc',1,3000);
 /*!40000 ALTER TABLE `foodanddrink` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `movie`
+--
+
+DROP TABLE IF EXISTS `movie`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `movie` (
+  `movie_id` int NOT NULL AUTO_INCREMENT,
+  `movie_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `movie_poster` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `movie_genre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `movie_length` int NOT NULL,
+  `movie_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `movie_review` int DEFAULT NULL,
+  PRIMARY KEY (`movie_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `movie`
+--
+
+LOCK TABLES `movie` WRITE;
+/*!40000 ALTER TABLE `movie` DISABLE KEYS */;
+INSERT INTO `movie` VALUES (7,'Harry Potter and the Sorcerer\'s Stone','harrypotter1.jpg','Fantasy',152,'A young wizard discovers his magical heritage and attends Hogwarts School.',5),(8,'Test update film','xin chao','Novel',180,'test spring boot',4),(9,'Titanic','titanic.jpg','Romance',195,'A young couple from different social backgrounds fall in love aboard the ill-fated RMS Titanic.',4),(10,'Test update','xin chao','Novel',180,'test spring boot',4),(11,'dmm','Xin chao','Fantasy',152,'A young wizard discovers his magical heritage and attends Hogwarts School.',5);
+/*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -220,7 +198,7 @@ CREATE TABLE `room` (
   PRIMARY KEY (`room_id`),
   KEY `fk_room_cinema_idx` (`cinema_id`),
   CONSTRAINT `fk_room_cinema` FOREIGN KEY (`cinema_id`) REFERENCES `cinema` (`cinema_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -229,6 +207,7 @@ CREATE TABLE `room` (
 
 LOCK TABLES `room` WRITE;
 /*!40000 ALTER TABLE `room` DISABLE KEYS */;
+INSERT INTO `room` VALUES (1,1,'Phong chi co hai nguoi thoi'),(2,1,'Test update thu xem chay duoc ko'),(3,1,'Test thu xem chay duoc ko'),(5,3,'Test lan 2 thu xem chay duoc ko'),(6,1,'Test lan 3 thu xem chay duoc ko');
 /*!40000 ALTER TABLE `room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -241,17 +220,20 @@ DROP TABLE IF EXISTS `schedule`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `schedule` (
   `schedule_id` int NOT NULL AUTO_INCREMENT,
-  `film_id` int NOT NULL,
+  `movie_id` int NOT NULL,
   `room_id` int NOT NULL,
   `schedule_date` date NOT NULL,
   `schedule_start` time NOT NULL,
   `schedule_end` time NOT NULL,
+  `cinema_id` int DEFAULT NULL,
   PRIMARY KEY (`schedule_id`),
   KEY `fk_schedule_room_idx` (`room_id`),
-  KEY `fk_schedule_film_idx` (`film_id`),
-  CONSTRAINT `fk_schedule_film` FOREIGN KEY (`film_id`) REFERENCES `film` (`film_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_schedule_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `fk_schedule_film_idx` (`movie_id`),
+  KEY `FKuk1m56gbrdyomvctf1teeefe` (`cinema_id`),
+  CONSTRAINT `fk_schedule_film` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`movie_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_schedule_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FKuk1m56gbrdyomvctf1teeefe` FOREIGN KEY (`cinema_id`) REFERENCES `cinema` (`cinema_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +242,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+INSERT INTO `schedule` VALUES (1,7,1,'2005-06-05','12:00:00','14:00:00',1),(2,8,3,'2005-06-05','12:00:00','14:00:00',3);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,15 +255,16 @@ DROP TABLE IF EXISTS `seat`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seat` (
   `seat_id` int NOT NULL AUTO_INCREMENT,
-  `seat_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seat_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_id` int NOT NULL,
-  `row` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `number` int NOT NULL,
+  `seat_row` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seat_number` int NOT NULL,
   `seat_price` double NOT NULL,
+  `seat_state` bit(1) NOT NULL,
   PRIMARY KEY (`seat_id`),
   KEY `fk_seat_room_idx` (`room_id`),
   CONSTRAINT `fk_seat_room` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,6 +273,7 @@ CREATE TABLE `seat` (
 
 LOCK TABLES `seat` WRITE;
 /*!40000 ALTER TABLE `seat` DISABLE KEYS */;
+INSERT INTO `seat` VALUES (1,'Thuong gia',1,'A',25,3000,_binary '\0');
 /*!40000 ALTER TABLE `seat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -360,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-18  0:18:26
+-- Dump completed on 2025-04-29 15:47:30
