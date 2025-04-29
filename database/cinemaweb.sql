@@ -49,22 +49,21 @@ DROP TABLE IF EXISTS `booking`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `booking` (
   `booking_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
   `schedule_id` int NOT NULL,
-  `seat_id` int NOT NULL,
   `price` double NOT NULL,
   `booking_day` datetime(6) DEFAULT NULL,
   `fd_id` int DEFAULT NULL,
-  `food_and_drink_id` int NOT NULL,
+  `seat_id` int DEFAULT NULL,
+  `user_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`booking_id`),
-  KEY `fk_booking_user_idx` (`user_id`),
+  UNIQUE KEY `UKjx9a9qmksuasu3taidjqyp0co` (`user_id`),
   KEY `fk_booking_schedule_idx` (`schedule_id`),
-  KEY `fk_booking_seat_idx` (`seat_id`),
   KEY `fk_booking_foodanddrink_idx` (`fd_id`),
+  KEY `FK7ryitbom1ln9okwlj2t9tt9ym` (`seat_id`),
+  CONSTRAINT `FK7ryitbom1ln9okwlj2t9tt9ym` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`seat_id`),
   CONSTRAINT `fk_booking_foodanddrink` FOREIGN KEY (`fd_id`) REFERENCES `foodanddrink` (`fd_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_booking_schedule` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`seat_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_booking_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FKkgseyy7t56x7lkjgu3wah5s3t` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -132,6 +131,29 @@ INSERT INTO `foodanddrink` VALUES (1,'1 bong 1 nuoc',3,3000),(2,'2 bong 1 nuoc',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `invalidated_token`
+--
+
+DROP TABLE IF EXISTS `invalidated_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invalidated_token` (
+  `id` varchar(255) NOT NULL,
+  `expiry_time` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invalidated_token`
+--
+
+LOCK TABLES `invalidated_token` WRITE;
+/*!40000 ALTER TABLE `invalidated_token` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invalidated_token` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `movie`
 --
 
@@ -161,6 +183,55 @@ INSERT INTO `movie` VALUES (7,'Harry Potter and the Sorcerer\'s Stone','harrypot
 UNLOCK TABLES;
 
 --
+-- Table structure for table `password_otp`
+--
+
+DROP TABLE IF EXISTS `password_otp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `password_otp` (
+  `otp` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiry_time` datetime(6) NOT NULL,
+  `user_id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`otp`),
+  KEY `fk_password_otp_user1_idx` (`user_id`),
+  CONSTRAINT `fk_password_otp_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `password_otp`
+--
+
+LOCK TABLES `password_otp` WRITE;
+/*!40000 ALTER TABLE `password_otp` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_otp` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permission`
+--
+
+DROP TABLE IF EXISTS `permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permission` (
+  `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permission`
+--
+
+LOCK TABLES `permission` WRITE;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `role`
 --
 
@@ -168,10 +239,9 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
-  `role_id` int NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`role_id`),
-  UNIQUE KEY `role_name_UNIQUE` (`role_name`)
+  `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -182,6 +252,33 @@ CREATE TABLE `role` (
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_permissions`
+--
+
+DROP TABLE IF EXISTS `role_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role_permissions` (
+  `role_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `permission_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`role_name`,`permission_name`),
+  KEY `fk_role_has_permission_permission1_idx` (`permission_name`),
+  KEY `fk_role_has_permission_role1_idx` (`role_name`),
+  CONSTRAINT `fk_role_has_permission_permission1` FOREIGN KEY (`permission_name`) REFERENCES `permission` (`name`),
+  CONSTRAINT `fk_role_has_permission_role1` FOREIGN KEY (`role_name`) REFERENCES `role` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_permissions`
+--
+
+LOCK TABLES `role_permissions` WRITE;
+/*!40000 ALTER TABLE `role_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -285,17 +382,19 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `fullname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `birthday` date NOT NULL,
-  `gender` tinyint NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `point` double NOT NULL DEFAULT '0',
+  `user_id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_of_birth` date NOT NULL,
+  `gender` int DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `point` double DEFAULT '0',
   PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -311,29 +410,30 @@ LOCK TABLES `user` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_role`
+-- Table structure for table `user_roles`
 --
 
-DROP TABLE IF EXISTS `user_role`;
+DROP TABLE IF EXISTS `user_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_role` (
-  `user_id` int NOT NULL,
-  `role_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `fk_user_role_role_idx` (`role_id`),
-  CONSTRAINT `fk_user_role_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_role_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `user_roles` (
+  `user_id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`user_id`,`role_name`),
+  KEY `fk_user_has_role_role1_idx` (`role_name`),
+  KEY `fk_user_has_role_user1_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_role_role1` FOREIGN KEY (`role_name`) REFERENCES `role` (`name`),
+  CONSTRAINT `fk_user_has_role_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_role`
+-- Dumping data for table `user_roles`
 --
 
-LOCK TABLES `user_role` WRITE;
-/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+LOCK TABLES `user_roles` WRITE;
+/*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -345,4 +445,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-29 15:47:30
+-- Dump completed on 2025-04-29 16:27:54

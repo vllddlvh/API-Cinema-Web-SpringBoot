@@ -1,8 +1,6 @@
 package com.cinemaweb.API.Cinema.Web.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,10 +19,20 @@ public class Booking {
     @GeneratedValue(strategy = IDENTITY)
     int bookingId;
 
-    int userId;
     int scheduleId;
-    int seatId;
-    int foodAndDrinkId;
+
+    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    Seat seat;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    User user;
+
+    @ManyToOne
+    @JoinColumn(name = "fd_id")
+    FoodAndDrink foodAndDrink;
+
     double price;
     LocalDateTime bookingDay;
 }
