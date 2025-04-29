@@ -24,9 +24,11 @@ public enum ErrorCode {
     INVALID_PASSWORD(3002, "Password must be at lest 8 characters", HttpStatus.BAD_REQUEST),
     USERNAME_IS_NULL(3005, "Username must not be null", HttpStatus.BAD_REQUEST),
     PASSWORD_IS_NULL(3004, "Password must not be null", HttpStatus.BAD_REQUEST),
-    DOB_IS_NULL(3003, "User's DOB must not be bull", HttpStatus.BAD_REQUEST),
-    EMAIL_IS_NULL(3006, "User's email must not be bull", HttpStatus.BAD_REQUEST)
-    ;
+    DOB_IS_NULL(3003, "User's DOB must not be null", HttpStatus.BAD_REQUEST),
+    EMAIL_IS_NULL(3006, "User's email must not be null", HttpStatus.BAD_REQUEST),
+    CONFIRM_PASSWORD_FAIL(3007, "New password and confirm password are not the same!", HttpStatus.BAD_REQUEST),
+    WAIT_OTP(4000,"Please wait 90s to resend OTP!" , HttpStatus.BAD_REQUEST),
+    INVALID_OTP(4001, "OTP not exist or expired!" , HttpStatus.BAD_REQUEST);
     int code;
     String message;
     HttpStatusCode httpStatusCode;

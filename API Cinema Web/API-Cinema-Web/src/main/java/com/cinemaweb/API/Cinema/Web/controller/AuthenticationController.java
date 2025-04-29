@@ -4,16 +4,15 @@ import com.cinemaweb.API.Cinema.Web.dto.request.*;
 import com.cinemaweb.API.Cinema.Web.dto.response.ApiResponse;
 import com.cinemaweb.API.Cinema.Web.dto.response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.dto.response.IntrospectResponse;
+import com.cinemaweb.API.Cinema.Web.dto.response.PasswordResetResponse;
 import com.cinemaweb.API.Cinema.Web.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -57,15 +56,14 @@ public class AuthenticationController {
     @PostMapping("/forget-password")
     public ApiResponse<String> getPasswordOTP(@RequestBody PasswordOtpRequest request) {
         return ApiResponse.<String>builder()
-                .body(authenticationService.getPasswordToken(request.getEmail()))
+                .message(authenticationService.getPasswordToken(request.getEmail()))
                 .build();
     }
 
-    @PostMapping("/reset-password")
-    public ApiResponse<String> resetPassword(@RequestBody PasswordResetRequest request) {
-        authenticationService.resetPassword(request);
-        return ApiResponse.<String>builder()
-                .body("Reset password thanh cong!")
+    @PostMapping("/reset-password/{otp}")
+    public ApiResponse<PasswordResetResponse> resetPassword(@RequestBody @Valid PasswordResetRequest request, @PathVariable("otp") String OTP) {
+        return ApiResponse.<PasswordResetResponse>builder()
+                .body(authenticationService.resetPassword(request, OTP))
                 .build();
     }
 

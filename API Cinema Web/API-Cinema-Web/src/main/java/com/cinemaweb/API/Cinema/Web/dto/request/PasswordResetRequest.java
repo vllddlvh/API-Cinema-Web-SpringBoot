@@ -12,9 +12,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PasswordResetRequest {
-    @NotNull(message = "PASSWORD_OTP_NULL")
-    @JsonProperty("OTP")
-    String OTP;
 
     @Size(min = 8, message = "INVALID_PASSWORD")
     @NotNull(message = "PASSWORD_IS_NULL")

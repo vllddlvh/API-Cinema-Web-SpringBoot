@@ -27,7 +27,7 @@ public class SecurityConfig {
             "/auth/logout",
             "/auth/refresh-Token",
             "/auth/forget-password",
-            "/auth/reset-password"
+            "/auth/reset-password/**"
     };
 
 

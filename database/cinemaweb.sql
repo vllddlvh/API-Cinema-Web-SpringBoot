@@ -167,6 +167,7 @@ DROP TABLE IF EXISTS `password_otp`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_otp` (
   `otp` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expiry_time` datetime(6) NOT NULL,
   `valid` BOOLEAN NOT NULL,
   `user_id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,

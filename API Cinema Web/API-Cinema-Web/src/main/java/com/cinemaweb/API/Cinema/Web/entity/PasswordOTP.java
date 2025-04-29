@@ -21,7 +21,7 @@ public class PasswordOTP {
     @JsonProperty("OTP")
     String OTP;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
 

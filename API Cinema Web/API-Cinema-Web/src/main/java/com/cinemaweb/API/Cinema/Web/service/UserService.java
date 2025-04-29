@@ -89,9 +89,8 @@ public class UserService {
     }
 
 
-    public void resetPassword(PasswordOTP passwordOTP, String newPassword) {
-        User user = passwordOTP.getUser();
+    public User resetPassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

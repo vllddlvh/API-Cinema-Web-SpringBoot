@@ -26,13 +26,14 @@ public class EmailService {
 
     public void sendResetPasswordOtp(User user, PasswordOTP passwordOTP) throws MailException {
         String OTP = passwordOTP.getOTP();
+        String resetLink = "http://localhost:8080/api/auth/reset-password/" + OTP;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setFrom(SYSTEM_EMAIL_ADDRESS);
         message.setSubject("Password Reset Token");
         message.setSentDate(new Date());
         message.setText("Hello " + user.getLastName() + "!\n"
-                + "Click here to reset your password: " + OTP + "\n"
+                + "Click here to reset your password: " + resetLink + "\n"
                 + "Keep it secret! Don't share to anyone!");
 
         mailSender.send(message);

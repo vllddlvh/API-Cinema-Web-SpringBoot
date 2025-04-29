@@ -4,6 +4,7 @@ package com.cinemaweb.API.Cinema.Web.service;
 import com.cinemaweb.API.Cinema.Web.dto.request.*;
 import com.cinemaweb.API.Cinema.Web.dto.response.AuthenticationResponse;
 import com.cinemaweb.API.Cinema.Web.dto.response.IntrospectResponse;
+import com.cinemaweb.API.Cinema.Web.dto.response.PasswordResetResponse;
 import com.cinemaweb.API.Cinema.Web.entity.InvalidatedToken;
 import com.cinemaweb.API.Cinema.Web.entity.PasswordOTP;
 import com.cinemaweb.API.Cinema.Web.entity.User;
@@ -96,17 +97,20 @@ public class AuthenticationService {
 
     @Transactional(rollbackFor = Exception.class)
     public String getPasswordToken(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email khong ton tai"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTS));
 
-        passwordOtpRepository.deleteByUser(user);
+        if (passwordOtpRepository.countOtp(user.getID()) > 0) {
+            throw new AppException(ErrorCode.WAIT_OTP);
+        }
 
-        // Ép hibernate đẩy delete xuống để ko conflict với save ở đoạn sau do constraint unique
+
+        passwordOtpRepository.invalidateOtp(user.getID());
         passwordOtpRepository.flush();
 
         PasswordOTP passwordOTP = PasswordOTP.builder()
                 .OTP(UUID.randomUUID().toString())
                 .user(user)
-                .expiryTime(new Date(Instant.now().plus(10, ChronoUnit.MINUTES).toEpochMilli()))
+                .expiryTime(new Date(Instant.now().plus(5, ChronoUnit.MINUTES).toEpochMilli()))
                 .valid(true)
                 .build();
 
@@ -118,26 +122,34 @@ public class AuthenticationService {
         // sendMail có thể ném ra MailException hãy xử lý trong globalExceptionHandler
     }
 
-    public void resetPassword(PasswordResetRequest request) {
-        PasswordOTP passwordOTP = verifyOTP(request.getOTP());
-        if (request.getNewPassword().equals(request.getConfirmPassword())) {
-            log.warn("getting new");
-            userService.resetPassword(passwordOTP, request.getNewPassword());
-        } else {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+
+    @Transactional(rollbackFor = Exception.class)
+    public PasswordResetResponse resetPassword(PasswordResetRequest request, String OTP) {
+        PasswordOTP passwordOTP = verifyOTP(OTP);
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new AppException(ErrorCode.CONFIRM_PASSWORD_FAIL);
         }
+
+        User user = userService.resetPassword(passwordOTP.getUser(), request.getNewPassword());
+        passwordOTP.setValid(false);
+        passwordOtpRepository.save(passwordOTP);
+
+        return PasswordResetResponse.builder()
+                .token(generateToken(user))
+                .build();
     }
 
 
     private PasswordOTP verifyOTP(String OTP) {
         PasswordOTP passwordOTP = passwordOtpRepository.findById(OTP)
-                .orElseThrow(() -> new RuntimeException("OTP khong chinh xac"));
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_OTP));
 
-        if (passwordOTP.getExpiryTime().after(new Date())) {
+        if (passwordOTP.getExpiryTime().after(new Date()) && passwordOTP.isValid()) {
             return passwordOTP;
         }
 
-        throw new RuntimeException("OTP het hieu luc");
+        throw new AppException(ErrorCode.INVALID_OTP);
     }
     
 
